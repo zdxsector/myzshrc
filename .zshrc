@@ -119,9 +119,9 @@ PROMPT='$ '
 if (( $+commands[gls] )); then
   ls() {
     if [[ -t 1 ]]; then
-      command gls --color=always "$@" | perl -pe 's/\e\[38;5;147m([^\e\n]+\.app)(?=\e\[0m)/\e[38;5;123;1m$1/g'
+      command gls -C --color=always "$@" | perl -pe 's/\e\[38;5;147m([^\e\n]+\.app)(?=\e\[0m)/\e[38;5;123;1m$1/g'
     else
-      command gls --color=never "$@"
+      command gls -C --color=never "$@"
     fi
   }
 fi
