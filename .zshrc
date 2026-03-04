@@ -39,23 +39,6 @@ compinit -C
 
 WORDCHARS=${WORDCHARS//\/}
 
-setopt AUTO_MENU
-setopt AUTO_LIST
-setopt COMPLETE_IN_WORD
-setopt ALWAYS_TO_END
-
-zstyle ':completion:*' menu select=2
-zstyle ':completion:*' matcher-list \
-  'm:{a-z}={A-Za-z}' \
-  'r:|[._-]=* r:|=*'
-zstyle ':completion:*' group-name ''
-
-# Descriptions / messages
-zstyle ':completion:*' auto-description 'specify: %d'
-zstyle ':completion:*' format '%F{yellow}-- %d --%f'
-zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
-zstyle ':completion:*:messages' format '%F{magenta}-- %d --%f'
-zstyle ':completion:*:warnings' format '%F{red}-- no matches --%f'
 
 # File and directory colors for zsh completion and ls.
 export CLICOLOR=1
@@ -64,6 +47,7 @@ export LS_COLORS='di=38;5;147:fi=38;5;15:ln=38;5;213:pi=38;5;221:so=38;5;208:bd=
 
 # Process listing enhancement
 zstyle ':completion:*:*:*:*:processes' command 'ps -u $USER -o pid,%cpu,%mem,cmd'
+
 # Colors for zsh completion lists
 zstyle ':completion:*' list-colors \
   '*.app(|/)=38;5;123;1' \
@@ -145,7 +129,14 @@ zinit light docker/compose
 
 zinit light zsh-users/zsh-completions
 
-# Fast syntax highlighting (must be last)
+# Fast syntax highlighting (Must be loaded BEFORE autocomplete)
+# Disabling 'chroma' features to prevent conflict with autocomplete UI
+FAST_HIGHLIGHT[chroma-man]=0
+FAST_HIGHLIGHT[chroma-git]=0
 zinit light zdharma-continuum/fast-syntax-highlighting
+
+# Autocomplete (MUST be loaded AFTER fast-syntax-highlighting to fix unhandled ZLE widget)
+zstyle ':autocomplete:*' list-lines 8
+zinit light marlonrichert/zsh-autocomplete
 
 . "$HOME/.local/bin/env"
