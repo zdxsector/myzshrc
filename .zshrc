@@ -130,10 +130,11 @@ zinit light docker/compose
 zinit light zsh-users/zsh-completions
 
 # Fast syntax highlighting (Must be loaded BEFORE autocomplete)
+zinit light zdharma-continuum/fast-syntax-highlighting
+
 # Disabling 'chroma' features to prevent conflict with autocomplete UI
 FAST_HIGHLIGHT[chroma-man]=0
 FAST_HIGHLIGHT[chroma-git]=0
-zinit light zdharma-continuum/fast-syntax-highlighting
 
 # Autocomplete (MUST be loaded AFTER fast-syntax-highlighting to fix unhandled ZLE widget)
 zstyle ':autocomplete:*' list-lines 8
