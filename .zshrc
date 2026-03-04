@@ -130,25 +130,22 @@ fi
 source /opt/homebrew/opt/zinit/zinit.zsh
 
 # Autosuggestions
-zinit ice wait"0" lucid
 zinit light zsh-users/zsh-autosuggestions
 
 # Git completions
-zinit ice wait"0" lucid as"completion"
+zinit ice as"completion"
 zinit light git/git
 
 # Docker completions
-zinit ice wait"0" lucid as"completion"
+zinit ice as"completion"
 zinit light docker/cli
 
-zinit ice wait"0" lucid as"completion"
+zinit ice as"completion"
 zinit light docker/compose
 
-zinit ice wait"0" lucid
 zinit light zsh-users/zsh-completions
 
-# Fast syntax highlighting (must be last, still turbo)
-zinit ice wait"0" lucid
+# Fast syntax highlighting (must be last)
 zinit light zdharma-continuum/fast-syntax-highlighting
 
 . "$HOME/.local/bin/env"
