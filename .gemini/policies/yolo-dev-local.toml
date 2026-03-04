@@ -1,0 +1,59 @@
+# Deny-by-default in YOLO (overrides the built-in "allow all in yolo" default policy via tiering)
+[[rule]]
+toolName = "*"
+decision = "deny"
+modes = ["yolo"]
+priority = 10
+deny_message = "YOLO is restricted: tool not allowlisted for local-dev."
+
+# Allow local-dev file ops (read/search/edit)
+[[rule]]
+toolName = ["list_directory", "read_file", "glob", "grep_search", "replace", "write_file"]
+decision = "allow"
+modes = ["yolo"]
+priority = 200
+
+# Allow ONLY build/test/lint-ish shell prefixes (match starts-with)
+[[rule]]
+toolName = "run_shell_command"
+commandPrefix = [
+  "git status",
+  "git diff",
+  "git log",
+  "git show",
+  "git grep",
+
+  "npm test",
+  "npm run test",
+  "npm run build",
+  "npm run lint",
+  "npm run typecheck",
+
+  "pnpm test",
+  "pnpm run test",
+  "pnpm run build",
+  "pnpm run lint",
+
+  "yarn test",
+  "yarn build",
+  "yarn lint",
+
+  "pytest",
+  "python -m pytest",
+  "go test",
+  "cargo test",
+  "make test",
+  "make build",
+  "dotnet test"
+]
+decision = "allow"
+modes = ["yolo"]
+priority = 300
+
+# Hard-block destructive / remote-changing commands even if they slip into an allowlist later
+[[rule]]
+toolName = "run_shell_command"
+commandRegex = '(?:^|\s)(?:rmdir|del|erase|unlink|sudo|shred|dd|cipher)\b|(?:^|\s)git\s+(?:merge|rebase)\b|(?:^|\s)chmod\s+-R\s+0?777\b|(?:^|\s)rm\s+(?:(?:-rf|-fr)|(?:(?:-r|-R|--recursive)\s+(?:-f|--force)|(?:-f|--force)\s+(?:-r|-R|--recursive)))(?:\s+(?:-[A-Za-z]+|--[A-Za-z0-9-]+(?:=[^\s]+)?))*\s+(?:\*|/|~/?|\.)(?:\s|$)'
+modes = ["yolo"]
+priority = 900
+deny_message = "Blocked destructive or remote-changing command."
