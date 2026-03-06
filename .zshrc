@@ -140,4 +140,38 @@ FAST_HIGHLIGHT[chroma-git]=0
 zstyle ':autocomplete:*' list-lines 8
 zinit light marlonrichert/zsh-autocomplete
 
-. "$HOME/.local/bin/env"
+rm() {
+  emulate -L zsh
+
+  local arg ans
+  local recursive=0
+
+  for arg in "$@"; do
+    case "$arg" in
+      -r|-R|-rf|-fr|-r[fR]*|-R[fR]*|--recursive)
+        recursive=1
+        ;;
+      --force)
+        ;;
+      --)
+        ;;
+      -*)
+        ;;
+      /|.|..|"$HOME"|"$HOME"/)
+        print -u2 "Blocked: refusing to remove '$arg'"
+        return 1
+        ;;
+    esac
+  done
+
+  if (( recursive )); then
+    print -u2 -n "Recursive delete requested. Type YES to continue: "
+    read -r ans
+    [[ "$ans" == YES ]] || return 1
+  fi
+
+  command rm "$@"
+}
+
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+
